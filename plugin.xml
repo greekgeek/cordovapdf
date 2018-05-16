@@ -4,7 +4,7 @@
         id="cordova-plugin-pdfplugin" version="0.0.1">
     <name>Cordova PDF</name>
 
-    <description>An Android Cordova plugin that allows users to download view pdf</description>
+    <description>An Android Cordova plugin that allows users to download view pdf in cordova</description>
     <license>MIT</license>
 
     <keywords>cordova pdf plugin</keywords>
