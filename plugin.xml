@@ -7,7 +7,7 @@
     <description>An Android Cordova plugin that allows users to download/view file in cordova</description>
     <license>MIT</license>
 
-    <keywords>cordova pdf plugin</keywords>
+    <keywords>cordova filedownloader plugin</keywords>
     <repo>https://github.com/greekgeek/filedownload-cordova-plugin.git</repo>
     <issue>https://github.com/greekgeek/filedownload-cordova-plugin/issues</issue>
   
@@ -15,8 +15,8 @@
         <engine name="cordova" version=">=3.0.0"/>
     </engines>
   
-    <js-module src="www/pdfplugin.js" name="pdfplugin">
-        <clobbers target="window.plugins.pdfplugin" />
+    <js-module src="www/filedownloader.js" name="filedownloader">
+        <clobbers target="window.plugins.filedownloader" />
     </js-module>
     <platform name="android">
         <config-file target="AndroidManifest.xml" parent="/*">
