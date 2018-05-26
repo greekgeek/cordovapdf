@@ -19,11 +19,13 @@
         <clobbers target="window.plugins.pdfplugin" />
     </js-module>
     <platform name="android">
+        <config-file target="AndroidManifest.xml" parent="/*">
+          <uses-permission android:name="android.permission.INTERNET"/>
+          <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+          <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+        </config-file>
         <framework src="com.android.support:appcompat-v7:23.0.1" />
         <config-file target="res/xml/config.xml" parent="/*">
-         <uses-permission android:name="android.permission.INTERNET"/>
-         <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-         <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
             <feature name="FileDownloader">
                 <param name="android-package" value="com.greek.cordova.plugin.FileDownloader"/>
             </feature>

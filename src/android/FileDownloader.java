@@ -147,6 +147,6 @@ public class FileDownloader extends CordovaPlugin implements ActivityCompat.OnRe
         }
           // Permission is not granted
       }
-    return false;
+    return true;
   }
 }
