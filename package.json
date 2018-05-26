@@ -10,7 +10,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/greekgeek/cordovapdf.git"
+        "url": "git+https://github.com/greekgeek/filedownload-cordova-plugin.git"
     },
     "keywords": [
         "Toast",
@@ -29,7 +29,7 @@
     "author": "Greek Geek <greekgeek522@gmail.com>",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/greekgeek/cordovapdf/issues"
+        "url": "https://github.com/greekgeek/filedownload-cordova-plugin/issues"
     },
-    "homepage": "https://github.com/greekgeek/cordovapdf/"
+    "homepage": "https://github.com/greekgeek/filedownload-cordova-plugin"
 }

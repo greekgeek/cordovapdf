@@ -9,7 +9,7 @@ filedownloader.prototype.download = function(url, filename, successCallback, err
   cordova.exec(successCallback, errorCallback, 'FileDownloader', 'download', [obj]);
 }
 
-// Installation constructor that binds pdfplugin to window
+// Installation constructor that binds filedownloader to window
 filedownloader.install = function() {
   if (!window.plugins) {
     window.plugins = {};
