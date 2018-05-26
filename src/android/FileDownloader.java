@@ -1,10 +1,9 @@
 package com.greek.cordova.plugin;
 // The native Toast API
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 import android.os.*;
 // Cordova-required packages
@@ -20,7 +19,7 @@ import java.net.URL;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
-public class FileDownloader extends CordovaPlugin implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class FileDownloader extends CordovaPlugin {
   boolean DEBUG = false;
   final int MY_PERMISSIONS_REQUEST_READ_STORAGE = 0;
   final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 1;
@@ -99,7 +98,7 @@ public class FileDownloader extends CordovaPlugin implements ActivityCompat.OnRe
       return true;
   }
   @Override
-  public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+  public void onRequestPermissionResult(int requestCode, String permissions[], int[] grantResults) {
     switch (requestCode) {
       case MY_PERMISSIONS_REQUEST_READ_STORAGE: {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -134,18 +133,20 @@ public class FileDownloader extends CordovaPlugin implements ActivityCompat.OnRe
           callbackContext.error("\"" + action + "\" is not a recognized action.");
           return false;
       }
-      if (ContextCompat.checkSelfPermission(mainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-        ActivityCompat.requestPermissions(mainActivity,
-          new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-          MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
-        if (ContextCompat.checkSelfPermission(mainActivity, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
-          ActivityCompat.requestPermissions(mainActivity,
-            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-            MY_PERMISSIONS_REQUEST_READ_STORAGE);
-        } else {
+      if (Build.VERSION.SDK_INT >= 23) {
+          if (mainActivity.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+              mainActivity.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                      MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
+              if (mainActivity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                  mainActivity.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                          MY_PERMISSIONS_REQUEST_READ_STORAGE);
+              } else {
+                  return downloadFile();
+              }
+              // Permission is not granted
+          }
+      } else {
           return downloadFile();
-        }
-          // Permission is not granted
       }
     return true;
   }
