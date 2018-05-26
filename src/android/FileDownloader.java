@@ -1,6 +1,7 @@
 package com.greek.cordova.plugin;
 // The native Toast API
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -14,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.File;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -25,6 +27,7 @@ public class FileDownloader extends CordovaPlugin implements ActivityCompat.OnRe
 
   boolean writePermission = false;
   boolean readPermission = false;
+  Activity mainActivity = null;
 
   String action = null;
   JSONArray args = null;
@@ -35,7 +38,7 @@ public class FileDownloader extends CordovaPlugin implements ActivityCompat.OnRe
       System.out.println("DOWNLOADER LOGS::" + message);
     }
   }
-  public int downloadFile() {
+  public boolean downloadFile() {
       URL url;
       File root;
       File dir;
@@ -124,33 +127,26 @@ public class FileDownloader extends CordovaPlugin implements ActivityCompat.OnRe
   public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) {
       this.action = action;
       this.args = args;
+      mainActivity = cordova.getActivity();
       this.callbackContext = callbackContext;
       // Verify that the user sent a 'show' action
       if (!action.equals("download")) {
-        callbackContext.error("\"" + action + "\" is not a recognized action.");
-        return false;
+          callbackContext.error("\"" + action + "\" is not a recognized action.");
+          return false;
       }
-      if (ContextCompat.checkSelfPermission(mainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-              != PackageManager.PERMISSION_GRANTED) {
-
+      if (ContextCompat.checkSelfPermission(mainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        ActivityCompat.requestPermissions(mainActivity,
+          new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+          MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
+        if (ContextCompat.checkSelfPermission(mainActivity, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
           ActivityCompat.requestPermissions(mainActivity,
-                  new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                  MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
-
-          if (ContextCompat.checkSelfPermission(mainActivity, Manifest.permission.READ_EXTERNAL_STORAGE)
-                  != PackageManager.PERMISSION_GRANTED) {
-
-              ActivityCompat.requestPermissions(mainActivity,
-                      new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                      MY_PERMISSIONS_REQUEST_READ_STORAGE);
-
-          } else {
-                return downloadFile(action, args, callbackContext);
-          }
-
+            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+            MY_PERMISSIONS_REQUEST_READ_STORAGE);
+        } else {
+          return downloadFile();
+        }
           // Permission is not granted
       }
-
+    return false;
   }
-
 }
