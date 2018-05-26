@@ -2,14 +2,14 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-pdfplugin" version="0.0.1">
-    <name>Cordova PDF</name>
+    <name>File Downloader</name>
 
-    <description>An Android Cordova plugin that allows users to download/view pdf in cordova</description>
+    <description>An Android Cordova plugin that allows users to download/view file in cordova</description>
     <license>MIT</license>
 
     <keywords>cordova pdf plugin</keywords>
-    <repo>https://github.com/greekgeek/cordovapdf.git</repo>
-    <issue>https://github.com/greekgeek/cordovapdf/issues</issue>
+    <repo>https://github.com/greekgeek/filedownload-cordova-plugin.git</repo>
+    <issue>https://github.com/greekgeek/filedownload-cordova-plugin/issues</issue>
   
     <engines>
         <engine name="cordova" version=">=3.0.0"/>
@@ -21,11 +21,11 @@
     <platform name="android">
         <framework src="com.android.support:appcompat-v7:21+" />
         <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="PDFplugin">
-                <param name="android-package" value="com.greek.cordova.plugin.PDFplugin"/>
+            <feature name="FileDownloader">
+                <param name="android-package" value="com.greek.cordova.plugin.FileDownloader"/>
             </feature>
         </config-file>
 
-        <source-file src="src/android/PDFplugin.java" target-dir="src/com/greek/cordova/plugin" />
+        <source-file src="src/android/FileDownloader.java" target-dir="src/com/greek/cordova/plugin" />
     </platform>
 </plugin>

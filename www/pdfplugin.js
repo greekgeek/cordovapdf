@@ -10,11 +10,11 @@ pdfplugin.prototype.download = function(url, filename, successCallback, errorCal
 }
 
 // Installation constructor that binds pdfplugin to window
-pdfplugin.install = function() {
+filedownloader.install = function() {
   if (!window.plugins) {
     window.plugins = {};
   }
-  window.plugins.pdfplugin = new pdfplugin();
-  return window.plugins.pdfplugin;
+  window.plugins.filedownloader = new filedownloader();
+  return window.plugins.filedownloader;
 };
-cordova.addConstructor(pdfplugin.install);
+cordova.addConstructor(filedownloader.install);
