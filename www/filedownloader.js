@@ -2,10 +2,13 @@ function filedownloader() {}
 
 // The function that passes work along to native shells
 // Message is a string, duration may be 'long' or 'short'
-filedownloader.prototype.download = function(url, filename, successCallback, errorCallback) {
+filedownloader.prototype.download = function(param, successCallback, errorCallback) {
   var obj = {};
-  obj.url = url;
-  obj.fileName = filename;
+  if ((typeof param) === (typeof obj)) {
+    obj.filename = param.filename;
+    obj.fileurl = param.fileurl;
+    obj.folder = param.folder;
+  }
   cordova.exec(successCallback, errorCallback, 'FileDownloader', 'download', [obj]);
 }
 
