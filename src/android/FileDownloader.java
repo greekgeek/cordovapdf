@@ -58,12 +58,12 @@ public class FileDownloader extends CordovaPlugin {
           if(payload.has("fileurl")) {
               fileURL = payload.getString("fileurl");
           }
-          if(filename == null || fileURL == null || filename == null) {
+          if(folder == null || fileURL == null || filename == null) {
               callbackContext.error("Error in getting one of options: (filename, fileurl, filename)");
               // Error CB
           }
           try {
-              DEBUGGER(payload.getString("url"));
+              DEBUGGER(folder +"fileURL" + fileURL + "filename" + filename);
               url = new URL(fileURL);
               HttpURLConnection connection = (HttpURLConnection)url.openConnection();
               connection.connect();
