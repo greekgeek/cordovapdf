@@ -8,7 +8,9 @@ import android.widget.Toast;
 import android.os.*;
 // Cordova-required packages
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +39,19 @@ public class FileDownloader extends CordovaPlugin {
       System.out.println("DOWNLOADER LOGS::" + message);
     }
   }
+    @Override
+    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+        super.initialize(cordova, webView);
+        mainActivity = cordova.getActivity();
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (mainActivity.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                mainActivity.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
+                // Permission is not granted
+            }
+        }
+        // your init code here
+    }
   public boolean downloadFile() {
       URL url;
       File root;
@@ -102,21 +117,13 @@ public class FileDownloader extends CordovaPlugin {
     switch (requestCode) {
       case MY_PERMISSIONS_REQUEST_READ_STORAGE: {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-          this.readPermission = true;
-            if(this.writePermission && this.readPermission) {
-              this.downloadFile();
-              }
-          } else {
+            this.readPermission = true;
         }
           return;
       }
       case MY_PERMISSIONS_REQUEST_WRITE_STORAGE: {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-          this.writePermission = true;
-            if(this.writePermission && this.readPermission) {
-              this.downloadFile();
-            }
-        } else {
+            this.writePermission = true;
         }
         return;
       }
@@ -126,7 +133,6 @@ public class FileDownloader extends CordovaPlugin {
   public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) {
       this.action = action;
       this.args = args;
-      mainActivity = cordova.getActivity();
       this.callbackContext = callbackContext;
       // Verify that the user sent a 'show' action
       if (!action.equals("download")) {
@@ -135,15 +141,11 @@ public class FileDownloader extends CordovaPlugin {
       }
       if (Build.VERSION.SDK_INT >= 23) {
           if (mainActivity.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-              mainActivity.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                      MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
-              if (mainActivity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                  mainActivity.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                          MY_PERMISSIONS_REQUEST_READ_STORAGE);
-              } else {
-                  return downloadFile();
-              }
+              DEBUGGER("Write permission not granted");
+              callbackContext.error("App write permission not accepted!");
               // Permission is not granted
+          } else {
+              return downloadFile();
           }
       } else {
           return downloadFile();
